@@ -1,0 +1,9 @@
+<stack>
+  <description brief="ros_realtime">ros_realtime</description>
+  <author>Maintained by Josh Faust</author>
+  <license>BSD,BSD, Boost</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ros_realtime</url>
+  <depend stack="ros" /> <!-- rosconsole, roslib, std_msgs, roscpp -->
+
+</stack>
