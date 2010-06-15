@@ -1,7 +1,9 @@
 <stack>
-  <description brief="ros_realtime">ros_realtime</description>
+  <description brief="Tools for ROS use from realtime systems">
+    Contains tools for using ROS from within realtime threads, mainly the rosrt package.
+  </description>
   <author>Maintained by Josh Faust</author>
-  <license>BSD,BSD, Boost</license>  
+  <license>BSD, Boost</license>  
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/ros_realtime</url>
   <depend stack="ros" /> <!-- rosconsole, roslib, std_msgs, roscpp -->
