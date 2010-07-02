@@ -90,7 +90,6 @@ public:
    * for anything else
    */
   Publisher()
-  : pool_(0)
   {
   }
 
@@ -101,7 +100,6 @@ public:
    * \param tmpl A template object to intialize all the messages in the message pool with
    */
   Publisher(const ros::Publisher& pub, uint32_t message_pool_size, const M& tmpl)
-  : pool_(0)
   {
     initialize(pub, message_pool_size, tmpl);
   }
@@ -115,7 +113,6 @@ public:
    * \param tmpl A template object to intialize all the messages in the message pool with
    */
   Publisher(ros::NodeHandle& nh, const std::string& topic, uint32_t ros_publisher_queue_size, uint32_t message_pool_size, const M& tmpl)
-  : pool_(0)
   {
     initialize(nh, topic, ros_publisher_queue_size, message_pool_size, tmpl);
   }
@@ -133,8 +130,6 @@ public:
    */
   void initialize(const ros::Publisher& pub, uint32_t message_pool_size, const M& tmpl)
   {
-    ROS_ASSERT(!pool_);
-
     pub_ = pub;
     pool_ = new lockfree::ObjectPool<M>();
     pool_->initialize(message_pool_size, tmpl);

@@ -32,9 +32,9 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#include <ros/rt/subscriber.h>
-#include <ros/rt/detail/subscriber_manager.h>
-#include <ros/rt/detail/managers.h>
+#include <rosrt/subscriber.h>
+#include <rosrt/detail/subscriber_manager.h>
+#include <rosrt/detail/managers.h>
 
 #include <boost/bind.hpp>
 

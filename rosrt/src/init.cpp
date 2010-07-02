@@ -32,9 +32,9 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#include <ros/rt/detail/publisher_manager.h>
-#include <ros/rt/detail/subscriber_manager.h>
-#include <ros/rt/detail/simple_gc.h>
+#include <rosrt/detail/publisher_manager.h>
+#include <rosrt/detail/subscriber_manager.h>
+#include <rosrt/detail/simple_gc.h>
 
 #include <boost/thread.hpp>
 
