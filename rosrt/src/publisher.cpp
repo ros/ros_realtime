@@ -32,10 +32,10 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#include <ros/rt/publisher.h>
-#include <ros/rt/detail/publisher_manager.h>
-#include <ros/rt/detail/managers.h>
-#include <ros/rt/init.h>
+#include <rosrt/publisher.h>
+#include <rosrt/detail/publisher_manager.h>
+#include <rosrt/detail/managers.h>
+#include <rosrt/init.h>
 #include <ros/debug.h>
 
 #include <lockfree/object_pool.h>

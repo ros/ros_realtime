@@ -32,12 +32,64 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#ifndef ROSRT_RT_H
-#define ROSRT_RT_H
+#ifndef ROSRT_PUBLISHER_MANAGER_H
+#define ROSRT_PUBLISHER_MANAGER_H
 
-#include "rt/publisher.h"
-#include "rt/subscriber.h"
-#include "rt/malloc_wrappers.h"
-#include "rt/init.h"
+#include "mwsr_queue.h"
 
-#endif // ROSRT_RT_H
+#include <ros/atomic.h>
+#include <ros/publisher.h>
+#include <rosrt/publisher.h>
+#include <lockfree/object_pool.h>
+#include <boost/thread.hpp>
+
+namespace rosrt
+{
+
+struct InitOptions;
+
+namespace detail
+{
+class PublishQueue
+{
+public:
+  struct PubItem
+  {
+    ros::Publisher pub;
+    VoidConstPtr msg;
+    PublishFunc pub_func;
+    CloneFunc clone_func;
+  };
+
+  PublishQueue(uint32_t size);
+
+  bool push(const ros::Publisher& pub, const VoidConstPtr& msg, PublishFunc pub_func, CloneFunc clone_func);
+  uint32_t publishAll();
+
+private:
+  MWSRQueue<PubItem> queue_;
+};
+
+class PublisherManager
+{
+public:
+  PublisherManager(const InitOptions& ops);
+  ~PublisherManager();
+  bool publish(const ros::Publisher& pub, const VoidConstPtr& msg, PublishFunc pub_func, CloneFunc clone_func);
+
+private:
+  void publishThread();
+
+  PublishQueue queue_;
+  boost::condition_variable cond_;
+  boost::mutex cond_mutex_;
+  boost::thread pub_thread_;
+  ros::atomic<uint32_t> pub_count_;
+  volatile bool running_;
+};
+
+} // namespace detail
+} // namespace rosrt
+
+#endif // ROSRT_PUBLISHER_MANAGER_H
+

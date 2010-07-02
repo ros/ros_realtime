@@ -34,7 +34,7 @@
 
 #include <gtest/gtest.h>
 
-#include "ros/rt/malloc_wrappers.h"
+#include "rosrt/malloc_wrappers.h"
 #include "ros/atomic.h"
 #include <ros/time.h>
 #include <ros/console.h>

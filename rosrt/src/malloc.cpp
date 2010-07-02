@@ -32,7 +32,7 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#include <ros/rt/malloc_wrappers.h>
+#include <rosrt/malloc_wrappers.h>
 
 #include <ros/assert.h>
 #include <ros/atomic.h>

@@ -32,9 +32,9 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#include <ros/rt/detail/simple_gc.h>
-#include <ros/rt/detail/managers.h>
-#include <ros/rt/init.h>
+#include <rosrt/detail/simple_gc.h>
+#include <rosrt/detail/managers.h>
+#include <rosrt/init.h>
 #include <ros/debug.h>
 
 namespace rosrt
