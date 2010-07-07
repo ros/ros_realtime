@@ -79,6 +79,7 @@ public:
    * \brief Default constructor.  You must call initialize() before doing anything else if you use this constructor.
    */
   Subscriber()
+  : pool_(0)
   {
   }
 
@@ -88,6 +89,7 @@ public:
    * will be received until some messages are freed.
    */
   Subscriber(uint32_t message_pool_size)
+  : pool_(0)
   {
     initialize(message_pool_size);
   }
@@ -101,6 +103,7 @@ public:
    * \param [optional] transport_hints the transport hints to use
    */
   Subscriber(uint32_t message_pool_size, ros::NodeHandle& nh, const std::string& topic, const ros::TransportHints& transport_hints = ros::TransportHints())
+  : pool_(0)
   {
     initialize(message_pool_size);
     subscribe(nh, topic, transport_hints);
