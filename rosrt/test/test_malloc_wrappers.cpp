@@ -41,6 +41,10 @@
 
 #include <boost/thread.hpp>
 
+#if __unix__ && !APPLE
+#include <dlfcn.h>
+#endif
+
 using namespace rosrt;
 using namespace ros;
 
@@ -112,6 +116,29 @@ TEST(MallocWrappers, statsNewThread)
 
   ASSERT_FALSE(failed.load());
 }
+
+// TODO: once we have a low-level dynamic library wrapper, use it and allow testing on non-unix platforms
+#if __unix__ && !APPLE
+TEST(MallocWrappers, sharedObjectDynamicallyOpened)
+{
+  void* handle = dlopen("libtest_malloc_wrappers_so.so", RTLD_LAZY|RTLD_GLOBAL);
+  ASSERT_TRUE(handle);
+  void*(*alloc_func)(size_t) = (void*(*)(size_t))dlsym(handle, "myTestMalloc");
+  ASSERT_TRUE(handle);
+  void(*free_func)(void*) = (void(*)(void*))dlsym(handle, "myTestFree");
+  ASSERT_TRUE(free_func);
+
+  resetThreadAllocInfo();
+  void* mem = alloc_func(500);
+  free_func(mem);
+
+  AllocInfo info = getThreadAllocInfo();
+  ASSERT_EQ(info.mallocs, 1U);
+  ASSERT_EQ(info.frees, 1U);
+
+  dlclose(handle);
+}
+#endif
 
 void doBreakOnMalloc()
 {

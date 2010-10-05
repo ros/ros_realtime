@@ -41,3 +41,6 @@ rosbuild_add_rostest(test/test_subscriber.xml)
 
 rosbuild_add_gtest(test_malloc_wrappers test/test_malloc_wrappers.cpp)
 target_link_libraries(test_malloc_wrappers ${PROJECT_NAME})
+
+rosbuild_add_library(test_malloc_wrappers_so EXCLUDE_FROM_ALL test/test_malloc_wrappers_so.cpp)
+rosbuild_declare_test(test_malloc_wrappers_so)
