@@ -24,7 +24,7 @@ static inline void full_fence(void)
 }
 
 template<>
-void platform_atomic_thread_fence(memory_order2 order)
+inline void platform_atomic_thread_fence(memory_order2 order)
 {
 	switch(order) {
 		case memory_order2_seq_cst:
@@ -91,9 +91,9 @@ public:
 	{
 		return (T)BOOST_INTERLOCKED_EXCHANGE_ADD((long *)&i, c);
 	}
-
+	
 	bool is_lock_free(void) const volatile {return true;}
-
+	
 	typedef T integral_type;
 private:
 	T i;
@@ -111,7 +111,7 @@ template<typename T>
 class platform_atomic_integral<T, 1>: public build_atomic_from_larger_type<atomic_interlocked_32<uint32_t>, T> {
 public:
 	typedef build_atomic_from_larger_type<atomic_interlocked_32<uint32_t>, T> super;
-
+	
 	explicit platform_atomic_integral(T v) : super(v) {}
 	platform_atomic_integral(void) {}
 };
@@ -120,7 +120,7 @@ template<typename T>
 class platform_atomic_integral<T, 2>: public build_atomic_from_larger_type<atomic_interlocked_32<uint32_t>, T> {
 public:
 	typedef build_atomic_from_larger_type<atomic_interlocked_32<uint32_t>, T> super;
-
+	
 	explicit platform_atomic_integral(T v) : super(v) {}
 	platform_atomic_integral(void) {}
 };
