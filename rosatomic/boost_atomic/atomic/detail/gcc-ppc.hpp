@@ -73,7 +73,7 @@ static inline void fence_after(memory_order2 order)
 }
 
 template<>
-void platform_atomic_thread_fence(memory_order2 order)
+inline void platform_atomic_thread_fence(memory_order2 order)
 {
 	switch(order) {
 		case memory_order2_acquire:
@@ -136,7 +136,7 @@ public:
 			"bne- 2f\n"
 			"addi %1,0,1\n"
 			"1:"
-
+			
 			".subsection 2\n"
 			"2: addi %1,0,0\n"
 			"b 1b\n"
@@ -148,7 +148,7 @@ public:
 		else fence_after(failure_order);
 		return success;
 	}
-
+	
 	bool is_lock_free(void) const volatile {return true;}
 protected:
 	inline T fetch_add_var(T c, memory_order2 order) volatile
@@ -242,7 +242,7 @@ public:
 			"bne- 2f\n"
 			"addi %1,0,1\n"
 			"1:"
-
+			
 			".subsection 2\n"
 			"2: addi %1,0,0\n"
 			"b 1b\n"
@@ -255,7 +255,7 @@ public:
 		fence_after(order);
 		return success;
 	}
-
+	
 	bool is_lock_free(void) const volatile {return true;}
 protected:
 	inline T fetch_add_var(T c, memory_order2 order) volatile
@@ -320,7 +320,7 @@ template<typename T>
 class platform_atomic_integral<T, 1>: public build_atomic_from_larger_type<atomic_ppc_32<uint32_t>, T> {
 public:
 	typedef build_atomic_from_larger_type<atomic_ppc_32<uint32_t>, T> super;
-
+	
 	explicit platform_atomic_integral(T v) : super(v) {}
 	platform_atomic_integral(void) {}
 };
@@ -329,7 +329,7 @@ template<typename T>
 class platform_atomic_integral<T, 2>: public build_atomic_from_larger_type<atomic_ppc_32<uint32_t>, T> {
 public:
 	typedef build_atomic_from_larger_type<atomic_ppc_32<uint32_t>, T> super;
-
+	
 	explicit platform_atomic_integral(T v) : super(v) {}
 	platform_atomic_integral(void) {}
 };
