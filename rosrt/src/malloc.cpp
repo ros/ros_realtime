@@ -77,7 +77,7 @@ pthread_key_t g_tls_key;
 bool g_tls_key_initialized = false;
 
 AllocInfo g_thread_alloc_info[MAX_ALLOC_INFO];
-atomic_bool g_alloc_info_used[MAX_ALLOC_INFO];
+ros::atomic_bool g_alloc_info_used[MAX_ALLOC_INFO];
 
 void tlsDestructor(void* mem)
 {
