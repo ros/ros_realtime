@@ -1,5 +1,5 @@
-#ifndef BOOST_ATOMIC_DETAIL_ATOMIC_GCC_ALPHA_HPP
-#define BOOST_ATOMIC_DETAIL_ATOMIC_GCC_ALPHA_HPP
+#ifndef BOOST_DETAIL_ATOMIC_GCC_ALPHA_HPP
+#define BOOST_DETAIL_ATOMIC_GCC_ALPHA_HPP
 
 //  Copyright (c) 2009 Helge Bahmann
 //
@@ -7,8 +7,8 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-#include "base.hpp"
-#include "builder.hpp"
+#include <boost/atomic/detail/base.hpp>
+#include <boost/atomic/detail/builder.hpp>
 
 /*
   Refer to http://h71000.www7.hp.com/doc/82final/5601/5601pro_004.html
@@ -44,38 +44,38 @@ namespace boost {
 namespace detail {
 namespace atomic {
 
-static inline void fence_before(memory_order2 order)
+static inline void fence_before(memory_order order)
 {
 	switch(order) {
-		case memory_order2_consume:
-		case memory_order2_release:
-		case memory_order2_acq_rel:
-		case memory_order2_seq_cst:
+		case memory_order_consume:
+		case memory_order_release:
+		case memory_order_acq_rel:
+		case memory_order_seq_cst:
 			__asm__ __volatile__ ("mb" ::: "memory");
 		default:;
 	}
 }
 
-static inline void fence_after(memory_order2 order)
+static inline void fence_after(memory_order order)
 {
 	switch(order) {
-		case memory_order2_acquire:
-		case memory_order2_acq_rel:
-		case memory_order2_seq_cst:
+		case memory_order_acquire:
+		case memory_order_acq_rel:
+		case memory_order_seq_cst:
 			__asm__ __volatile__ ("mb" ::: "memory");
 		default:;
 	}
 }
 
 template<>
-inline void platform_atomic_thread_fence(memory_order2 order)
+inline void platform_atomic_thread_fence(memory_order order)
 {
 	switch(order) {
-		case memory_order2_acquire:
-		case memory_order2_consume:
-		case memory_order2_release:
-		case memory_order2_acq_rel:
-		case memory_order2_seq_cst:
+		case memory_order_acquire:
+		case memory_order_consume:
+		case memory_order_release:
+		case memory_order_acq_rel:
+		case memory_order_seq_cst:
 			__asm__ __volatile__ ("mb" ::: "memory");
 		default:;
 	}
@@ -87,13 +87,13 @@ public:
 	typedef T integral_type;
 	explicit atomic_alpha_32(T v) : i(v) {}
 	atomic_alpha_32() {}
-	T load(memory_order2 order=memory_order2_seq_cst) const volatile
+	T load(memory_order order=memory_order_seq_cst) const volatile
 	{
 		T v=*reinterpret_cast<volatile const int *>(&i);
 		fence_after(order);
 		return v;
 	}
-	void store(T v, memory_order2 order=memory_order2_seq_cst) volatile
+	void store(T v, memory_order order=memory_order_seq_cst) volatile
 	{
 		fence_before(order);
 		*reinterpret_cast<volatile int *>(&i)=(int)v;
@@ -101,8 +101,8 @@ public:
 	bool compare_exchange_weak(
 		T &expected,
 		T desired,
-		memory_order2 success_order,
-		memory_order2 failure_order) volatile
+		memory_order success_order,
+		memory_order failure_order) volatile
 	{
 		fence_before(success_order);
 		int current, success;
@@ -130,7 +130,7 @@ public:
 	
 	bool is_lock_free(void) const volatile {return true;}
 protected:
-	inline T fetch_add_var(T c, memory_order2 order) volatile
+	inline T fetch_add_var(T c, memory_order order) volatile
 	{
 		fence_before(order);
 		T original, modified;
@@ -151,7 +151,7 @@ protected:
 		fence_after(order);
 		return original;
 	}
-	inline T fetch_inc(memory_order2 order) volatile
+	inline T fetch_inc(memory_order order) volatile
 	{
 		fence_before(order);
 		int original, modified;
@@ -172,7 +172,7 @@ protected:
 		fence_after(order);
 		return original;
 	}
-	inline T fetch_dec(memory_order2 order) volatile
+	inline T fetch_dec(memory_order order) volatile
 	{
 		fence_before(order);
 		int original, modified;
@@ -203,13 +203,13 @@ public:
 	typedef T integral_type;
 	explicit atomic_alpha_64(T v) : i(v) {}
 	atomic_alpha_64() {}
-	T load(memory_order2 order=memory_order2_seq_cst) const volatile
+	T load(memory_order order=memory_order_seq_cst) const volatile
 	{
 		T v=*reinterpret_cast<volatile const T *>(&i);
 		fence_after(order);
 		return v;
 	}
-	void store(T v, memory_order2 order=memory_order2_seq_cst) volatile
+	void store(T v, memory_order order=memory_order_seq_cst) volatile
 	{
 		fence_before(order);
 		*reinterpret_cast<volatile T *>(&i)=v;
@@ -217,8 +217,8 @@ public:
 	bool compare_exchange_weak(
 		T &expected,
 		T desired,
-		memory_order2 success_order,
-		memory_order2 failure_order) volatile
+		memory_order success_order,
+		memory_order failure_order) volatile
 	{
 		fence_before(success_order);
 		int current, success;
@@ -246,7 +246,7 @@ public:
 	
 	bool is_lock_free(void) const volatile {return true;}
 protected:
-	inline T fetch_add_var(T c, memory_order2 order) volatile
+	inline T fetch_add_var(T c, memory_order order) volatile
 	{
 		fence_before(order);
 		T original, modified;
@@ -267,7 +267,7 @@ protected:
 		fence_after(order);
 		return original;
 	}
-	inline T fetch_inc(memory_order2 order) volatile
+	inline T fetch_inc(memory_order order) volatile
 	{
 		fence_before(order);
 		T original, modified;
@@ -288,7 +288,7 @@ protected:
 		fence_after(order);
 		return original;
 	}
-	inline T fetch_dec(memory_order2 order) volatile
+	inline T fetch_dec(memory_order order) volatile
 	{
 		fence_before(order);
 		T original, modified;
