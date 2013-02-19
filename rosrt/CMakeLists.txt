@@ -13,7 +13,6 @@ rosbuild_init()
 
 # Check for Xenomai:
 set(XENOMAI_SEARCH_PATH /usr/local/xenomai /usr/xenomai /usr)
-set(PROJECT_NAME ${PROJECT_NAME})
 find_path(XENOMAI_DIR bin/xeno-config ${XENOMAI_SEARCH_PATH})
 if (XENOMAI_DIR)
   set (XENOMAI_CONFIG ${XENOMAI_DIR}/bin/xeno-config)
