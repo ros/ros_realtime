@@ -42,6 +42,10 @@
 
 #include <boost/thread.hpp>
 
+#ifdef __XENO__
+#include <native/task.h>
+#endif
+
 namespace rosrt
 {
 namespace detail
@@ -95,14 +99,18 @@ PublisherManager::PublisherManager(const InitOptions& ops)
 : queue_(ops.pubmanager_queue_size)
 , pub_count_(0)
 , running_(true)
+, pub_thread_(boost::bind(&PublisherManager::publishThread, this),
+    ops.pubmanager_thread_name.c_str(),
+    ops.pubmanager_thread_cpu)
 {
-  pub_thread_ = boost::thread(&PublisherManager::publishThread, this);
 }
 
 PublisherManager::~PublisherManager()
 {
+  cond_mutex_.lock();
   running_ = false;
   cond_.notify_one();
+  cond_mutex_.unlock();
   pub_thread_.join();
 }
 
@@ -111,7 +119,7 @@ void PublisherManager::publishThread()
   while (running_)
   {
     {
-      boost::mutex::scoped_lock lock(cond_mutex_);
+      rosrt::mutex::scoped_lock lock(cond_mutex_);
       while (running_ && pub_count_.load() == 0)
       {
         cond_.wait(lock);
@@ -122,7 +130,11 @@ void PublisherManager::publishThread()
         return;
       }
     }
-
+#ifdef __XENO__
+    // in Xenomai, force a switch to secondary mode here so that
+    // publishing doesn't interfere with real-time tasks
+    rt_task_set_mode(T_PRIMARY, 0, NULL);
+#endif
     uint32_t count = queue_.publishAll();
     pub_count_.fetch_sub(count);
   }

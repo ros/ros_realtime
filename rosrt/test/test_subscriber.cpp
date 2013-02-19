@@ -42,6 +42,11 @@
 
 #include <boost/thread.hpp>
 
+#ifdef __XENO__
+#include <native/task.h>
+#include <sys/mman.h>
+#endif
+
 using namespace rosrt;
 
 void publishThread(ros::Publisher& pub, bool& done)
@@ -79,6 +84,9 @@ TEST(Subscriber, singleSubscriber)
       last = msg->data;
       ++count;
     }
+#ifdef  __XENO__
+    rt_task_sleep(1000000);
+#endif
   }
 
   ASSERT_EQ(getThreadAllocInfo().total_ops, 0UL);
@@ -128,6 +136,9 @@ TEST(Subscriber, multipleSubscribersSameTopic)
         all_done = false;
       }
     }
+#ifdef  __XENO__
+    rt_task_sleep(1000000);
+#endif
   }
 
   ASSERT_EQ(getThreadAllocInfo().total_ops, 0UL);
@@ -182,6 +193,9 @@ TEST(Subscriber, multipleSubscribersMultipleTopics)
         all_done = false;
       }
     }
+#ifdef  __XENO__
+    rt_task_sleep(1000000);
+#endif
   }
 
   done = true;
@@ -260,6 +274,11 @@ TEST(Subscriber, multipleThreadsSameTopic)
 
 int main(int argc, char** argv)
 {
+#ifdef __XENO__
+  mlockall(MCL_CURRENT | MCL_FUTURE);
+  rt_task_shadow(NULL, "test_rt_subscriber", 0, 0);
+#endif
+
   ros::init(argc, argv, "test_rt_subscriber");
   testing::InitGoogleTest(&argc, argv);
 

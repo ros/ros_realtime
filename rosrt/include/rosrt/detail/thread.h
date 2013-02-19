@@ -1,7 +1,7 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
 *
-*  Copyright (c) 2010, Willow Garage, Inc.
+*  Copyright (c) 2010, CLMC Lab, University of Southern California
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without
@@ -32,66 +32,77 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#ifndef ROSRT_PUBLISHER_MANAGER_H
-#define ROSRT_PUBLISHER_MANAGER_H
+#ifndef ROSRT_THREAD_H_
+#define ROSRT_THREAD_H_
 
-#include "mwsr_queue.h"
+#include <boost/utility.hpp>
 
-#include <ros/atomic.h>
-#include <ros/publisher.h>
-#include <rosrt/publisher.h>
-#include <lockfree/object_pool.h>
-#include <rosrt/detail/thread.h>
-#include <rosrt/detail/mutex.h>
-#include <rosrt/detail/condition_variable.h>
+#ifdef __XENO__
+#include <native/task.h>
+#else
+#include <boost/thread.hpp>
+#endif
+
+extern "C"
+{
+static void thread_proxy(void* arg);
+
+}
 
 namespace rosrt
 {
 
-struct InitOptions;
+/**
+ * Thin wrapper for a "real-time" thread, implementation differs based on platform.
+ * Falls back to boost::thread on generic platforms.
+ *
+ */
+class thread: boost::noncopyable
+{
+private:
+#ifdef __XENO__
+  RT_TASK thread_;
+  boost::function<void ()> thread_fn_;
+#else
+  boost::thread thread_;
+#endif
 
-namespace detail
-{
-class PublishQueue
-{
 public:
-  struct PubItem
+  explicit thread(boost::function<void ()> thread_fn, const char* name="", const int cpu_id=0)
   {
-    ros::Publisher pub;
-    VoidConstPtr msg;
-    PublishFunc pub_func;
-    CloneFunc clone_func;
-  };
+#ifdef __XENO__
+    thread_fn_ = thread_fn;
+    int error_code;
+    if (error_code = rt_task_spawn(&thread_, name, 0, 0, T_FPU | T_JOINABLE | T_CPU(cpu_id), thread_proxy, &thread_fn_))
+    {
+      ROS_ERROR("rosrt::thread - Couldn't spawn xenomai thread %s, error code = %d", name, error_code);
+    }
+    //thread_proxy(&thread_fn_);
+#else
+    thread_ = boost::thread(thread_fn);
+#endif
+  }
 
-  PublishQueue(uint32_t size);
+  ~thread()
+  {
+  }
 
-  bool push(const ros::Publisher& pub, const VoidConstPtr& msg, PublishFunc pub_func, CloneFunc clone_func);
-  uint32_t publishAll();
-
-private:
-  MWSRQueue<PubItem> queue_;
+  void join()
+  {
+#ifdef __XENO__
+    rt_task_join(&thread_);
+#else
+    thread_.join();
+#endif
+  }
 };
 
-class PublisherManager
+}
+
+static void thread_proxy(void* arg)
 {
-public:
-  PublisherManager(const InitOptions& ops);
-  ~PublisherManager();
-  bool publish(const ros::Publisher& pub, const VoidConstPtr& msg, PublishFunc pub_func, CloneFunc clone_func);
+  boost::function<void ()>* fn = static_cast<boost::function<void ()>*>(arg);
+  (*fn)();
+}
 
-private:
-  void publishThread();
-
-  PublishQueue queue_;
-  rosrt::condition_variable cond_;
-  rosrt::mutex cond_mutex_;
-  rosrt::thread pub_thread_;
-  ros::atomic<uint32_t> pub_count_;
-  volatile bool running_;
-};
-
-} // namespace detail
-} // namespace rosrt
-
-#endif // ROSRT_PUBLISHER_MANAGER_H
-
+#endif /* ROSRT_THREAD_H_ */

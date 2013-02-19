@@ -41,6 +41,12 @@
 #include <std_msgs/UInt32.h>
 
 #include <boost/thread.hpp>
+#include <rosrt/detail/thread.h>
+
+#ifdef __XENO__
+#include <native/task.h>
+#include <sys/mman.h>
+#endif
 
 using namespace rosrt;
 
@@ -152,10 +158,18 @@ void publishThread(Publisher<std_msgs::UInt32>& pub, bool& done)
     if (msg)
     {
       pub.publish(msg);
+#ifdef __XENO__
+      rt_task_yield();
+#endif
     }
     else
     {
+#ifdef __XENO__
+      rt_task_yield();
+      rt_task_sleep(1000000);
+#else
       ros::WallDuration(0.0001).sleep();
+#endif
     }
   }
 }
@@ -170,7 +184,8 @@ TEST(Publisher, multipleThreads)
   Helper helpers[count];
   ros::Subscriber subs[count];
 
-  boost::thread_group tg;
+  boost::shared_ptr<rosrt::thread> threads[count];
+
   bool done = false;
   for (uint32_t i = 0; i < count; ++i)
   {
@@ -178,8 +193,7 @@ TEST(Publisher, multipleThreads)
     topic << "test" << i;
     pubs[i].initialize(nh.advertise<std_msgs::UInt32>(topic.str(), 0), 100, std_msgs::UInt32());
     subs[i] = nh.subscribe(topic.str(), 0, &Helper::cb, &helpers[i]);
-
-    tg.create_thread(boost::bind(publishThread, boost::ref(pubs[i]), boost::ref(done)));
+    threads[i].reset(new rosrt::thread(boost::bind(publishThread, boost::ref(pubs[i]), boost::ref(done))));
   }
 
   uint32_t recv_count = 0;
@@ -194,11 +208,18 @@ TEST(Publisher, multipleThreads)
       recv_count += helpers[i].count;
     }
 
+#ifdef __XENO__
+    rt_task_yield();
+    rt_task_sleep(1000000);
+#else
     ros::WallDuration(0.01).sleep();
+#endif
   }
 
   done = true;
-  tg.join_all();
+
+  for (uint32_t i=0; i<count; ++i)
+    threads[i]->join();
 
   ASSERT_GE(recv_count, count * 10000);
 
@@ -210,6 +231,11 @@ TEST(Publisher, multipleThreads)
 
 int main(int argc, char** argv)
 {
+#ifdef __XENO__
+  mlockall(MCL_CURRENT | MCL_FUTURE);
+  rt_task_shadow(NULL, "test_rt_publisher", 1, 0);
+#endif
+
   ros::init(argc, argv, "test_rt_publisher");
   testing::InitGoogleTest(&argc, argv);
 

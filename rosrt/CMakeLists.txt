@@ -11,6 +11,19 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
 rosbuild_init()
 
+# Check for Xenomai:
+set(XENOMAI_SEARCH_PATH /usr/local/xenomai /usr/xenomai /usr)
+set(PROJECT_NAME ${PROJECT_NAME})
+find_path(XENOMAI_DIR bin/xeno-config ${XENOMAI_SEARCH_PATH})
+if (XENOMAI_DIR)
+  set (XENOMAI_CONFIG ${XENOMAI_DIR}/bin/xeno-config)
+  message ("Xenomai found in ${XENOMAI_DIR}")
+  execute_process(COMMAND ${XENOMAI_CONFIG} --skin=native --cflags OUTPUT_VARIABLE XENOMAI_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${XENOMAI_CONFIG} --skin=native --ldflags OUTPUT_VARIABLE XENOMAI_LDFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set (ROSRT_PLATFORM_CFLAGS ${XENOMAI_CFLAGS})
+  set (ROSRT_PLATFORM_LDFLAGS ${XENOMAI_LDFLAGS})
+endif (XENOMAI_DIR)
+
 #set the default path for built executables to the "bin" directory
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
@@ -23,10 +36,16 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 include_directories(include)
 
+#add platform-specific compile flags
+add_definitions(${ROSRT_PLATFORM_CFLAGS})
+
 #common commands for building c++ executables and libraries
 rosbuild_add_library(${PROJECT_NAME} src/malloc.cpp src/simple_gc.cpp src/publisher.cpp src/subscriber.cpp src/init.cpp)
 rosbuild_add_boost_directories()
 rosbuild_link_boost(${PROJECT_NAME} thread)
+
+#add platform-specific linker flags
+target_link_libraries(${PROJECT_NAME} ${ROSRT_PLATFORM_LDFLAGS})
 
 rosbuild_add_executable(test_publisher EXCLUDE_FROM_ALL test/test_publisher.cpp)
 rosbuild_add_gtest_build_flags(test_publisher)
