@@ -46,11 +46,15 @@ struct InitOptions
 {
   InitOptions()
   : pubmanager_queue_size(10000)
+  , pubmanager_thread_name("rosrt_pubmanager")
+  , pubmanager_thread_cpu(0)
   , gc_queue_size(1000)
   , gc_period(0.1)
   {}
 
   uint32_t pubmanager_queue_size;
+  std::string pubmanager_thread_name;
+  uint32_t pubmanager_thread_cpu;
   uint32_t gc_queue_size;
   ros::WallDuration gc_period;
 };

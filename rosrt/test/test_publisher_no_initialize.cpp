@@ -36,6 +36,10 @@
 #include <ros/ros.h>
 #include <std_msgs/UInt32.h>
 
+#ifdef __XENO__
+#include <native/task.h>
+#include <sys/mman.h>
+#endif
 
 /*
  * This little program will segfault if uninitialized pool resources 
@@ -43,6 +47,11 @@
  */
 int main(int argc, char** argv)
 {
+#ifdef __XENO__
+  mlockall(MCL_CURRENT | MCL_FUTURE);
+  rt_task_shadow(NULL, "test_publisher_no_initialize", 0, 0);
+#endif
+
   ros::init(argc, argv, "test_rt_publisher");
   ros::NodeHandle nh;
   rosrt::init();
