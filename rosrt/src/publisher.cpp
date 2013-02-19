@@ -97,11 +97,11 @@ uint32_t PublishQueue::publishAll()
 
 PublisherManager::PublisherManager(const InitOptions& ops)
 : queue_(ops.pubmanager_queue_size)
-, pub_count_(0)
-, running_(true)
 , pub_thread_(boost::bind(&PublisherManager::publishThread, this),
     ops.pubmanager_thread_name.c_str(),
     ops.pubmanager_thread_cpu)
+, pub_count_(0)
+, running_(true)
 {
 }
 

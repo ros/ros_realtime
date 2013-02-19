@@ -62,24 +62,24 @@ class thread: boost::noncopyable
 private:
 #ifdef __XENO__
   RT_TASK thread_;
-  boost::function<void ()> thread_fn_;
 #else
   boost::thread thread_;
 #endif
+  boost::function<void ()> thread_fn_;
 
 public:
   explicit thread(boost::function<void ()> thread_fn, const char* name="", const int cpu_id=0)
   {
-#ifdef __XENO__
     thread_fn_ = thread_fn;
+#ifdef __XENO__
     int error_code;
-    if (error_code = rt_task_spawn(&thread_, name, 0, 0, T_FPU | T_JOINABLE | T_CPU(cpu_id), thread_proxy, &thread_fn_))
+    error_code = rt_task_spawn(&thread_, name, 0, 0, T_FPU | T_JOINABLE | T_CPU(cpu_id), thread_proxy, &thread_fn_);
+    if (error_code)
     {
       ROS_ERROR("rosrt::thread - Couldn't spawn xenomai thread %s, error code = %d", name, error_code);
     }
-    //thread_proxy(&thread_fn_);
 #else
-    thread_ = boost::thread(thread_fn);
+    thread_ = boost::thread(boost::bind(&thread_proxy, &thread_fn_));
 #endif
   }
 
