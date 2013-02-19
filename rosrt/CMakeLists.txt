@@ -49,3 +49,8 @@ rosbuild_add_executable(test_publisher_no_initialize test/test_publisher_no_init
 rosbuild_declare_test(test_publisher_no_initialize)
 target_link_libraries(test_publisher_no_initialize ${PROJECT_NAME})
 rosbuild_add_rostest(test/test_publisher_no_initialize.xml)
+
+rosbuild_add_executable(test_filtered_subscriber EXCLUDE_FROM_ALL test/test_filtered_subscriber.cpp)
+target_link_libraries(test_filtered_subscriber ${PROJECT_NAME})
+rosbuild_add_gtest_build_flags(test_filtered_subscriber)
+rosbuild_add_rostest(test/test_filtered_subscriber.xml)

@@ -37,6 +37,7 @@
 
 #include "publisher.h"
 #include "subscriber.h"
+#include "filtered_subscriber.h"
 #include "malloc_wrappers.h"
 #include "init.h"
 
