@@ -2,7 +2,7 @@
 Changelog for package rosatomic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.3 (2014-09-08)
+------------------
 * Added install targets
 * Contributors: TheDash

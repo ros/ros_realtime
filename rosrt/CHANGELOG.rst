@@ -2,7 +2,7 @@
 Changelog for package rosrt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.3 (2014-09-08)
+------------------
 * Added install targets to rosrt
 * Contributors: TheDash
