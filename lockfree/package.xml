@@ -1,0 +1,43 @@
+<package>
+  <name>lockfree</name>
+  <version>1.0.3</version>
+  <description>The lockfree package contains lock-free data structures for use in multithreaded programming.  These
+     kinds of data structures are generally not as easy to use as single-threaded equivalents, and are not
+     always faster.  If you don't know you need to use one, try another structure with a lock around it
+     first.</description>
+  <maintainer email="dash@clearpathrobotics.com">Devon Ash</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/lockfree</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Josh Faust</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>rosatomic</build_depend>
+  <build_depend>rosconsole</build_depend>
+  <build_depend>roslib</build_depend>
+  <build_depend>allocators</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>rosatomic</run_depend>
+  <run_depend>rosconsole</run_depend>
+  <run_depend>roslib</run_depend>
+  <run_depend>allocators</run_depend>
+
+  <!-- Dependencies needed only for running tests. -->
+  <!-- <test_depend>rosatomic</test_depend> -->
+  <!-- <test_depend>rosconsole</test_depend> -->
+  <!-- <test_depend>roslib</test_depend> -->
+  <!-- <test_depend>allocators</test_depend> -->
+
+<export>
+    <cpp lflags="-L${prefix}/lib -Wl,-rpath,${prefix}/lib -llockfree" cflags="-I${prefix}/include"/>
+</export>
+
+</package>
+

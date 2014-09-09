@@ -1,0 +1,48 @@
+<package>
+  <name>rosrt</name>
+  <version>1.0.3</version>
+  <description>rosrt provides classes for interfacing with ROS from within realtime systems, such as realtime-safe Publisher and Subscriber classes.</description>
+  <maintainer email="dash@clearpathrobotics.com">Devon Ash</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/rosrt</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Josh Faust</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>roscpp</build_depend>
+  <build_depend>roslib</build_depend>
+  <build_depend>rosunit</build_depend>
+  <build_depend>rosatomic</build_depend>
+  <build_depend>allocators</build_depend>
+  <build_depend>lockfree</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>roscpp</run_depend>
+  <run_depend>roslib</run_depend>
+  <run_depend>rosunit</run_depend>
+  <run_depend>rosatomic</run_depend>
+  <run_depend>allocators</run_depend>
+  <run_depend>lockfree</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <!-- Dependencies needed only for running tests. -->
+  <!-- <test_depend>roscpp</test_depend> -->
+  <!-- <test_depend>roslib</test_depend> -->
+  <!-- <test_depend>rosunit</test_depend> -->
+  <!-- <test_depend>rosatomic</test_depend> -->
+  <!-- <test_depend>allocators</test_depend> -->
+  <!-- <test_depend>lockfree</test_depend> -->
+  <!-- <test_depend>std_msgs</test_depend> -->
+
+<export>
+    <cpp lflags="-L${prefix}/lib -lrosrt -Wl,-rpath,${prefix}/lib" cflags="-I${prefix}/include"/>
+</export>
+
+</package>
