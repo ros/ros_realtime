@@ -38,13 +38,11 @@ catkin_package(
     LIBRARIES # TODO
 )
 catkin_add_gtest(test_malloc_wrappers test/test_malloc_wrappers.cpp)
-target_link_libraries(test_malloc_wrappers ${PROJECT_NAME})
+target_link_libraries(test_malloc_wrappers ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 catkin_add_gtest(test_publisher_no_initialize test/test_publisher_no_initialize.cpp)
-#rosbuild_declare_test(test_publisher_no_initialize)
 target_link_libraries(test_publisher_no_initialize ${PROJECT_NAME} ${catkin_LIBRARIES} ${lockfree_LIBRARIES})
 add_dependencies(test_publisher_no_initialize ${catkin_EXPORTED_TARGETS})
-
 
 install(DIRECTORY include/ DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
