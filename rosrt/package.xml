@@ -1,6 +1,6 @@
 <package>
   <name>rosrt</name>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <description>rosrt provides classes for interfacing with ROS from within realtime systems, such as realtime-safe Publisher and Subscriber classes.</description>
   <maintainer email="dash@clearpathrobotics.com">Devon Ash</maintainer>
 

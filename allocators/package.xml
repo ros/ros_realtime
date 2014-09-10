@@ -1,6 +1,6 @@
 <package>
   <name>allocators</name>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <description>Contains aligned allocation functions, as well as an STL-compatible AlignedAllocator class.</description>
   <maintainer email="dash@clearpathrobotics.com">Devon Ash</maintainer>
 
