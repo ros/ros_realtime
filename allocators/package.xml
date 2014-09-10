@@ -1,0 +1,28 @@
+<package>
+  <name>allocators</name>
+  <version>1.0.3</version>
+  <description>Contains aligned allocation functions, as well as an STL-compatible AlignedAllocator class.</description>
+  <maintainer email="dash@clearpathrobotics.com">Devon Ash</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/allocators</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Josh Faust</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+
+  <!-- Dependencies needed after this package is compiled. -->
+
+  <!-- Dependencies needed only for running tests. -->
+
+<export>
+    <cpp cflags="-I${prefix}/include"/>
+</export>
+
+</package>
+

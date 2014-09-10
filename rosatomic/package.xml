@@ -1,0 +1,31 @@
+<package>
+  <name>rosatomic</name>
+  <version>1.0.3</version>
+  <description>rosatomic provides the C++11-style atomic operations by pulling symbols from the proposed Boost.Atomic
+     package into the ros namespace.  Once C++11-style atomics (std::atomic) are available from compilers, rosatomic will
+     conditionally use those instead.</description>
+  <maintainer email="dash@clearpathrobotics.com">Devon Ash</maintainer>
+
+  <license>BSD</license>
+  <license>Boost</license>
+
+  <url type="website">http://ros.org/wiki/rosatomic</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Josh Faust</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+
+  <!-- Dependencies needed after this package is compiled. -->
+
+  <!-- Dependencies needed only for running tests. -->
+
+<export>
+    <cpp cflags="-I${prefix}/include"/>
+</export>
+
+</package>
+
