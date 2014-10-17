@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>ros_realtime</name>
-  <version>1.0.12</version>
+  <version>1.0.13</version>
   <description>The ros_realtime package</description>
  
   <maintainer email="dash@clearpathrobotics.com">Devon Ash</maintainer>
