@@ -37,7 +37,7 @@
 #define LOCKFREE_FREE_LIST_H
 
 #include <ros/assert.h>
-#include <ros/atomic.h>
+#include <rosatomic/ros/atomic.h>
 
 #if FREE_LIST_DEBUG
 #include <boost/thread.hpp>
