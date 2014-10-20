@@ -11,7 +11,6 @@ std_msgs)
 
 include_directories(include)
 include_directories(${catkin_INCLUDE_DIRS})
-link_directories(${catkin_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} src/malloc.cpp src/simple_gc.cpp src/publisher.cpp src/subscriber.cpp src/init.cpp)
 
