@@ -5,12 +5,13 @@ find_package(catkin REQUIRED )
 catkin_package(
     DEPENDS # TODO add dependencies
     CATKIN_DEPENDS # TODO
-    INCLUDE_DIRS include include/ros include/boost # TODO include
+    INCLUDE_DIRS include include/ros/ include/boost/ # TODO include
     LIBRARIES # TODO
 )
-include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} rosatomic_INCLUDE_DIRS)
 catkin_add_gtest(utest test/utest.cpp)
 
-install(DIRECTORY include/ include/ros include/boost DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+install(DIRECTORY include/${PROJECT_NAME}/ include/ros/ include/boost/ DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
 install(DIRECTORY test/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
