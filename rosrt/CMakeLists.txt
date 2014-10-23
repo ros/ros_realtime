@@ -12,6 +12,13 @@ std_msgs)
 include_directories(include)
 include_directories(${catkin_INCLUDE_DIRS})
 
+catkin_package(
+    DEPENDS roscpp roslib rosunit rosatomic allocators lockfree std_msgs
+    CATKIN_DEPENDS # TODO
+    INCLUDE_DIRS include # TODO include
+    LIBRARIES ${PROJECT_NAME} # TODO
+)
+
 add_library(${PROJECT_NAME} src/malloc.cpp src/simple_gc.cpp src/publisher.cpp src/subscriber.cpp src/init.cpp)
 
 find_package(Boost REQUIRED COMPONENTS thread)
@@ -27,13 +34,6 @@ target_link_libraries(test_subscriber ${PROJECT_NAME})
 
 add_library(test_malloc_wrappers_so EXCLUDE_FROM_ALL test/test_malloc_wrappers_so.cpp)
 target_link_libraries(test_malloc_wrappers_so ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-catkin_package(
-    DEPENDS roscpp roslib rosunit rosatomic allocators lockfree std_msgs
-    CATKIN_DEPENDS # TODO
-    INCLUDE_DIRS include # TODO include
-    LIBRARIES # TODO
-)
 catkin_add_gtest(test_malloc_wrappers test/test_malloc_wrappers.cpp)
 target_link_libraries(test_malloc_wrappers ${PROJECT_NAME} ${catkin_LIBRARIES})
 
