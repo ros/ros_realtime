@@ -4,6 +4,8 @@ Changelog for package ros_realtime
 
 Forthcoming
 -----------
+* Changelogs
+* Contributors: TheDash
 
 1.0.15 (2014-10-22)
 -------------------
