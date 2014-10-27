@@ -37,7 +37,7 @@
 #include <ros/assert.h>
 #include <ros/atomic.h>
 
-#include <boost/thread.hpp>
+#include "boost/thread.hpp"
 
 #include <iostream>
 #include <dlfcn.h>
