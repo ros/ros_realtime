@@ -35,7 +35,7 @@
 #ifndef ROSATOMIC_ATOMIC_H
 #define ROSATOMIC_ATOMIC_H
 
-#include "boost/atomic.hpp"
+#include <boost/atomic.hpp>
 
 namespace ros
 {
