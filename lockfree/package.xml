@@ -1,6 +1,6 @@
 <package>
   <name>lockfree</name>
-  <version>1.0.21</version>
+  <version>1.0.22</version>
   <description>The lockfree package contains lock-free data structures for use in multithreaded programming.  These
      kinds of data structures are generally not as easy to use as single-threaded equivalents, and are not
      always faster.  If you don't know you need to use one, try another structure with a lock around it
