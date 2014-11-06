@@ -41,6 +41,12 @@ catkin_add_gtest(test_publisher_no_initialize test/test_publisher_no_initialize.
 target_link_libraries(test_publisher_no_initialize ${PROJECT_NAME} ${catkin_LIBRARIES} ${lockfree_LIBRARIES})
 add_dependencies(test_publisher_no_initialize ${catkin_EXPORTED_TARGETS})
 
+
+install(TARGETS ${PROJECT_NAME}
+ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
 install(DIRECTORY include/${PROJECT_NAME}/ DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
 install(DIRECTORY test/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
