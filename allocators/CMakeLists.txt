@@ -15,7 +15,7 @@ catkin_package(
 
 catkin_add_gtest(test_aligned_alloc test/test_aligned_alloc.cpp)## Generate added messages and services with any dependencies listed here
 target_link_libraries(test_aligned_alloc ${Boost_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(test_aligned_alloc allocators_gencpp)
+#add_dependencies(test_aligned_alloc allocators_gencpp)
 
 install(DIRECTORY test/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
