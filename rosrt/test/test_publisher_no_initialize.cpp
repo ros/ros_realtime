@@ -32,10 +32,21 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
+
 #include "rosrt/rosrt.h"
 #include <ros/ros.h>
 #include <std_msgs/UInt32.h>
+#include <gtest/gtest.h>
 
+
+TEST(RosrtPublisher, testCase1)
+{
+	rosrt::init();
+	rosrt::Publisher<std_msgs::UInt32> pub;
+	ASSERT_EQ(0, 0);
+
+	SUCCEED();
+}
 
 /*
  * This little program will segfault if uninitialized pool resources 
@@ -44,8 +55,7 @@
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "test_rt_publisher");
+  testing::InitGoogleTest(&argc, argv);
   ros::NodeHandle nh;
-  rosrt::init();
-  rosrt::Publisher<std_msgs::UInt32> pub;
-  return 0;
+  return RUN_ALL_TESTS();
 }

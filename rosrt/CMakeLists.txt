@@ -34,12 +34,22 @@ target_link_libraries(test_subscriber ${PROJECT_NAME})
 
 add_library(test_malloc_wrappers_so EXCLUDE_FROM_ALL test/test_malloc_wrappers_so.cpp)
 target_link_libraries(test_malloc_wrappers_so ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-catkin_add_gtest(test_malloc_wrappers test/test_malloc_wrappers.cpp)
-target_link_libraries(test_malloc_wrappers ${PROJECT_NAME} ${catkin_LIBRARIES})
 
-catkin_add_gtest(test_publisher_no_initialize test/test_publisher_no_initialize.cpp)
-target_link_libraries(test_publisher_no_initialize ${PROJECT_NAME} ${catkin_LIBRARIES} ${lockfree_LIBRARIES})
-add_dependencies(test_publisher_no_initialize ${catkin_EXPORTED_TARGETS})
+if(CATKIN_ENABLE_TESTING)
+
+	find_package(rostest REQUIRED)
+	find_package(gtest)
+
+	catkin_add_gtest(test_malloc_wrappers test/test_malloc_wrappers.cpp)
+	target_link_libraries(test_malloc_wrappers ${PROJECT_NAME} ${catkin_LIBRARIES} -lpthread -ldl)
+	add_dependencies(test_malloc_wrappers ${catkin_EXPORTED_TARGETS} test_malloc_wrappers_so)
+
+	#catkin_add_gtest(test_publisher_no_initialize test/test_publisher_no_initialize.cpp)
+	add_rostest_gtest(test_publisher_no_initialize test/test_publisher_no_initialize.xml test/test_publisher_no_initialize.cpp)
+	target_link_libraries(test_publisher_no_initialize ${PROJECT_NAME} ${catkin_LIBRARIES} ${lockfree_LIBRARIES})
+	add_dependencies(test_publisher_no_initialize ${catkin_EXPORTED_TARGETS})
+
+endif()
 
 
 install(TARGETS ${PROJECT_NAME}
