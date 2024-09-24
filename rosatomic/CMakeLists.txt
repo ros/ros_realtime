@@ -9,7 +9,10 @@ catkin_package(
     LIBRARIES # TODO
 )
 include_directories(include ${catkin_INCLUDE_DIRS})
-catkin_add_gtest(utest test/utest.cpp)
+
+if(CATKIN_ENABLE_TESTING)
+   catkin_add_gtest(utest test/utest.cpp)
+endif()
 
 
 install(DIRECTORY include/ros include/boost DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})

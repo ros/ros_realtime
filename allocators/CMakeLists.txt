@@ -7,15 +7,17 @@ find_package(catkin REQUIRED )
 
 include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 catkin_package(
-    DEPENDS include # TODO add dependencies
+    DEPENDS # TODO add dependencies
     CATKIN_DEPENDS # TODO
     INCLUDE_DIRS include # TODO include
     LIBRARIES # TODO
 )
 
-catkin_add_gtest(test_aligned_alloc test/test_aligned_alloc.cpp)## Generate added messages and services with any dependencies listed here
-target_link_libraries(test_aligned_alloc ${Boost_LIBRARIES} ${catkin_LIBRARIES})
-#add_dependencies(test_aligned_alloc allocators_gencpp)
+if(CATKIN_ENABLE_TESTING)
+  catkin_add_gtest(test_aligned_alloc test/test_aligned_alloc.cpp)## Generate added messages and services with any dependencies listed here
+  target_link_libraries(test_aligned_alloc ${Boost_LIBRARIES} ${catkin_LIBRARIES})
+  #add_dependencies(test_aligned_alloc allocators_gencpp)
+endif()
 
 install(DIRECTORY test/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 

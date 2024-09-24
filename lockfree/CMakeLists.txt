@@ -16,14 +16,15 @@ add_library(${PROJECT_NAME} src/free_list.cpp)
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 #add_dependencies(${PROJECT_NAME} )
 
-catkin_add_gtest(test_freelist test/test_freelist.cpp)
-target_link_libraries(test_freelist ${PROJECT_NAME})
-#add_dependencies(test_freelist )
+if(CATKIN_ENABLE_TESTING)
+   catkin_add_gtest(test_freelist test/test_freelist.cpp)
+   target_link_libraries(test_freelist ${PROJECT_NAME})
+   #add_dependencies(test_freelist )
 
-catkin_add_gtest(test_object_pool test/test_object_pool.cpp)
-target_link_libraries(test_object_pool ${PROJECT_NAME})
-#add_dependencies(test_object_pool )
-
+   catkin_add_gtest(test_object_pool test/test_object_pool.cpp)
+   target_link_libraries(test_object_pool ${PROJECT_NAME})
+   #add_dependencies(test_object_pool )
+endif()
 
 install(TARGETS ${PROJECT_NAME}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

@@ -160,7 +160,8 @@ public:
   {
     ros::SubscribeOptions ops;
 #ifdef ROS_NEW_SERIALIZATION_API
-    ops.template init<M>(topic, 1, boost::bind(&Subscriber::callback, this, _1), boost::bind(&lockfree::ObjectPool<M>::allocateShared, pool_));
+    auto p{ pool_ };
+    ops.template init<M>(topic, 1, [this](auto msg){ callback(msg); }, [p](){ return p->allocateShared(); });
 #else
     ops.template init<M>(topic, 1, boost::bind(&Subscriber::callback, this, _1));
 #endif
